@@ -22,7 +22,7 @@ import { UserRole } from '../common/enums/user-role.enum';
 
 @ApiTags('Users')
 @ApiBearerAuth()
-//@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -35,7 +35,7 @@ export class UserController {
   }
 
   @Get()
-  //@Roles(UserRole.SUPER_ADMIN)
+ @Roles(UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Listar todos los usuarios (Solo Super Admin)' })
   @ApiResponse({ status: 200, description: 'Lista de usuarios' })
   findAll() {

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { UserRole } from '../../common/enums/user-role.enum';
-//import { Business } from '../../business/entities/business.entity';
+import { Business } from '../../business/entities/business.entity';
 
 @Entity('users')
 export class User {
@@ -41,7 +41,8 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
-
+  @OneToMany(() => Business, (business) => business.owner)
+  businesses: Business[];
 
   @CreateDateColumn()
   createdAt: Date;

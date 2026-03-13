@@ -1,5 +1,10 @@
 export enum UserRole {
   SUPER_ADMIN = 'super_admin',
-  BUSINESS_ADMIN = 'business_admin',
+  ADMIN = 'bussines',
   CLIENT = 'client',
+}
+
+export enum SoftwareStatus {
+  ACTIVO = 'activo',
+  INACTIVO = 'inactivo',
 }

@@ -7,6 +7,10 @@ import { UserModule } from './user/user.module';
 //import { BusinessModule } from './business/business.module';
 //import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 //import { RolesGuard } from './auth/guards/roles.guard';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { SoftwareModule } from './software/software.module';
+import { BusinessModule } from './business/business.module';
+import { CourtModule } from './court/court.module';
 
 @Module({
   imports: [
@@ -30,6 +34,10 @@ import { UserModule } from './user/user.module';
     }),
     AuthModule,
     UserModule,
+    CloudinaryModule,
+    SoftwareModule,
+    BusinessModule,
+    CourtModule,
    // BusinessModule,
   ],
   

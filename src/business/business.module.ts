@@ -4,9 +4,10 @@ import { BusinessService } from './business.service';
 import { BusinessController } from './business.controller';
 import { Business } from './entities/business.entity';
 import { BusinessSchedule } from './entities/business-schedule.entity';
+import { User } from '../user/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Business, BusinessSchedule])],
+  imports: [TypeOrmModule.forFeature([Business, BusinessSchedule, User])],
   controllers: [BusinessController],
   providers: [BusinessService],
   exports: [BusinessService],

@@ -28,6 +28,9 @@ export class CourtAvailability {
   @Column({ default: true })
   isAvailable: boolean;
 
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
+  pricePerHour: number | null;
+
   @ManyToOne(() => Court, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'courtId' })
   court: Court;

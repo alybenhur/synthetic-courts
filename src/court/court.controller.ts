@@ -35,7 +35,7 @@ export class CourtController {
   constructor(private readonly courtService: CourtService) {}
 
   @Post()
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Crear nueva cancha' })
   @ApiResponse({ status: 201, description: 'Cancha creada exitosamente' })
   @ApiResponse({ status: 403, description: 'No autorizado' })
@@ -67,7 +67,7 @@ export class CourtController {
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Actualizar cancha' })
   @ApiResponse({ status: 200, description: 'Cancha actualizada' })
   @ApiResponse({ status: 403, description: 'No autorizado' })
@@ -81,7 +81,7 @@ export class CourtController {
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Eliminar cancha' })
   @ApiResponse({ status: 200, description: 'Cancha eliminada' })
   @ApiResponse({ status: 403, description: 'No autorizado' })
@@ -91,7 +91,7 @@ export class CourtController {
   }
 
   @Post(':id/availability')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ 
     summary: 'Configurar horarios de disponibilidad de una cancha',
     description: 'Define los horarios en los que la cancha está disponible para reservas. Mínimo 1 hora por slot.'

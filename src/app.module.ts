@@ -11,6 +11,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { SoftwareModule } from './software/software.module';
 import { BusinessModule } from './business/business.module';
 import { CourtModule } from './court/court.module';
+import { BookingModule } from './booking/booking.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { CourtModule } from './court/court.module';
     SoftwareModule,
     BusinessModule,
     CourtModule,
+    BookingModule,
    // BusinessModule,
   ],
   

@@ -2,11 +2,13 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Business } from './entities/business.entity';
 import { BusinessSchedule } from './entities/business-schedule.entity';
+import { User } from '../user/entities/user.entity';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { UpdateBusinessDto } from './dto/update-business.dto';
 import { UserRole } from '../common/enums/user-role.enum';
@@ -19,13 +21,24 @@ export class BusinessService {
     private businessRepository: Repository<Business>,
     @InjectRepository(BusinessSchedule)
     private scheduleRepository: Repository<BusinessSchedule>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  async create(
-    createBusinessDto: CreateBusinessDto,
-    ownerId: string,
-  ): Promise<Business> {
-    const { schedules, ...businessData } = createBusinessDto;
+  async create(createBusinessDto: CreateBusinessDto): Promise<Business> {
+    const { schedules, ownerId, ...businessData } = createBusinessDto;
+
+    const owner = await this.userRepository.findOne({ where: { id: ownerId } });
+
+    if (!owner) {
+      throw new NotFoundException(`Usuario con ID ${ownerId} no encontrado`);
+    }
+
+    if (owner.role !== UserRole.BUSSINES) {
+      throw new BadRequestException(
+        'El usuario propietario debe tener rol BUSSINES',
+      );
+    }
 
     const business = this.businessRepository.create({
       ...businessData,

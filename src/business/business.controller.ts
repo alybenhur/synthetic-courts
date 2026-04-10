@@ -31,14 +31,11 @@ export class BusinessController {
  
 
   @Post()
-  @Roles(UserRole.ADMIN)
+  @Roles(UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Crear nuevo negocio' })
   @ApiResponse({ status: 201, description: 'Negocio creado exitosamente' })
-  create(
-    @Body() createBusinessDto: CreateBusinessDto,
-    @CurrentUser() user: any,
-  ) {
-    return this.businessService.create(createBusinessDto, user.id);
+  create(@Body() createBusinessDto: CreateBusinessDto) {
+    return this.businessService.create(createBusinessDto);
   }
 
   @Get()
@@ -49,7 +46,7 @@ export class BusinessController {
   }
 
   @Get('my-businesses')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Obtener mis negocios' })
   @ApiResponse({ status: 200, description: 'Lista de negocios del usuario' })
   findMyBusinesses(@CurrentUser() user: any) {
@@ -65,7 +62,7 @@ export class BusinessController {
   }
 
   @Patch(':id')
-  @Roles(UserRole.ADMIN, UserRole.SUPER_ADMIN)
+  @Roles(UserRole.BUSSINES, UserRole.SUPER_ADMIN)
   @ApiOperation({ summary: 'Actualizar negocio' })
   @ApiResponse({ status: 200, description: 'Negocio actualizado' })
   @ApiResponse({ status: 403, description: 'No autorizado' })

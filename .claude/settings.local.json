@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:stitch.withgoogle.com)",
+      "WebSearch",
+      "Bash(mysql -u root -proot canchasintetica -e \"SELECT id, firstName, lastName, email, role FROM users WHERE role = 'bussines';\")",
+      "Bash(node -e ':*)"
+    ]
+  }
+}

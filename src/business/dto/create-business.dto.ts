@@ -10,6 +10,7 @@ import {
   Max,
   IsEnum,
   IsBoolean,
+  IsUUID,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -41,6 +42,13 @@ class ScheduleDto {
 }
 
 export class CreateBusinessDto {
+  @ApiProperty({
+    example: 'uuid-del-usuario-bussines',
+    description: 'ID del usuario con rol BUSSINES al que pertenecerá el negocio',
+  })
+  @IsUUID()
+  ownerId: string;
+
   @ApiProperty({ example: 'Canchas El Estadio' })
   @IsString()
   name: string;

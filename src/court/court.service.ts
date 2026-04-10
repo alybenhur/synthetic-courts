@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { Court } from './entities/court.entity';
 import { CourtAvailability } from './entities/court-availability.entity';
 import { Business } from '../business/entities/business.entity';
+import { BusinessSchedule } from '../business/entities/business-schedule.entity';
 import { CreateCourtDto } from './dto/create-court.dto';
 import { UpdateCourtDto } from './dto/update-court.dto';
 import { SetCourtAvailabilityDto } from './dto/set-court-availability.dto';
@@ -24,6 +25,8 @@ export class CourtService {
     private availabilityRepository: Repository<CourtAvailability>,
     @InjectRepository(Business)
     private businessRepository: Repository<Business>,
+    @InjectRepository(BusinessSchedule)
+    private businessScheduleRepository: Repository<BusinessSchedule>,
   ) {}
 
   async create(
@@ -129,18 +132,46 @@ export class CourtService {
       );
     }
 
-    // Validar que los slots sean de mínimo 1 hora
+    // Cargar horarios del negocio al que pertenece la cancha
+    const businessSchedules = await this.businessScheduleRepository.find({
+      where: { businessId: court.business.id },
+    });
+
+    const scheduleByDay = new Map(
+      businessSchedules.map((s) => [s.dayOfWeek, s]),
+    );
+
+    const toMinutes = (time: string) => {
+      const [h, m] = time.split(':').map(Number);
+      return h * 60 + m;
+    };
+
+    // Validar que los slots sean de mínimo 1 hora y estén dentro del horario del negocio
     for (const slot of setAvailabilityDto.availability) {
-      const [startHour, startMin] = slot.startTime.split(':').map(Number);
-      const [endHour, endMin] = slot.endTime.split(':').map(Number);
-      
-      const startMinutes = startHour * 60 + startMin;
-      const endMinutes = endHour * 60 + endMin;
+      const startMinutes = toMinutes(slot.startTime);
+      const endMinutes = toMinutes(slot.endTime);
       const duration = endMinutes - startMinutes;
 
       if (duration < 60) {
         throw new BadRequestException(
           `El slot ${slot.dayOfWeek} ${slot.startTime}-${slot.endTime} debe ser de mínimo 1 hora`,
+        );
+      }
+
+      const schedule = scheduleByDay.get(slot.dayOfWeek);
+
+      if (!schedule || !schedule.isOpen) {
+        throw new BadRequestException(
+          `El negocio no opera el día ${slot.dayOfWeek}`,
+        );
+      }
+
+      const openMinutes = toMinutes(schedule.openTime);
+      const closeMinutes = toMinutes(schedule.closeTime);
+
+      if (startMinutes < openMinutes || endMinutes > closeMinutes) {
+        throw new BadRequestException(
+          `El slot ${slot.dayOfWeek} ${slot.startTime}-${slot.endTime} está fuera del horario del negocio (${schedule.openTime}-${schedule.closeTime})`,
         );
       }
     }
@@ -156,6 +187,7 @@ export class CourtService {
           startTime: slot.startTime,
           endTime: slot.endTime,
           isAvailable: slot.isAvailable ?? true,
+          pricePerHour: slot.pricePerHour ?? null,
           courtId,
         }),
       );
@@ -182,6 +214,12 @@ export class CourtService {
         startTime: 'ASC',
       },
     });
+  }
+
+  getEffectivePrice(slot: CourtAvailability, court: Court): number {
+    return slot.pricePerHour !== null && slot.pricePerHour !== undefined
+      ? Number(slot.pricePerHour)
+      : Number(court.pricePerHour);
   }
 
   async getAvailableSlots(

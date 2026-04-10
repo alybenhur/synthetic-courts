@@ -5,9 +5,10 @@ import { CourtController } from './court.controller';
 import { Court } from './entities/court.entity';
 import { CourtAvailability } from './entities/court-availability.entity';
 import { Business } from '../business/entities/business.entity';
+import { BusinessSchedule } from '../business/entities/business-schedule.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Court, CourtAvailability, Business])],
+  imports: [TypeOrmModule.forFeature([Court, CourtAvailability, Business, BusinessSchedule])],
   controllers: [CourtController],
   providers: [CourtService],
   exports: [CourtService],

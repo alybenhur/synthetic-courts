@@ -4,7 +4,7 @@ import * as streamifier from 'streamifier';
 
 @Injectable()
 export class CloudinaryService {
-  private readonly folder = 'imagenes';
+  private readonly folder = 'canchas';
 
   /**
    * Sube múltiples archivos a Cloudinary en la carpeta "imagenes"

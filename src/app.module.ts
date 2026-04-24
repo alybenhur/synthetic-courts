@@ -28,7 +28,8 @@ import { BookingModule } from './booking/booking.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get('NODE_ENV') === 'development',
+        synchronize: false,  // ✅ migraciones manuales, más seguro
+        migrationsRun: false,
         logging: configService.get('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],

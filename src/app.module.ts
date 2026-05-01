@@ -29,7 +29,7 @@ import { BookingModule } from './booking/booking.module';
         database: configService.get('DB_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,  // ✅ migraciones manuales, más seguro
-        migrationsRun: false,
+        migrationsRun: true,
         logging: configService.get('NODE_ENV') === 'development',
       }),
       inject: [ConfigService],
